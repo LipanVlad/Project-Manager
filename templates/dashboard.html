@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Dashboard</title>
+
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #111827;
+            margin: 0;
+            color: #d1d5db;
+        }
+        .mainHeader {
+            background-color: #1f2937;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+            align-items: center;
+            border-bottom: 1px solid #374151;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .addProjectButton {
+            background-color: #4b5563;
+            color: #f9fafb;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            position: absolute;
+            top: 5;
+            right: 0;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .addProjectButton:hover{
+            background-color: #6b7280;
+            color: #ffffff;
+        }
+        .projectContainer {
+            padding-top: 30px;
+            padding-bottom: 30px;
+            margin-left: 30px;
+            margin-right: 30px; 
+            display: flex;         
+            flex-wrap: wrap;       
+            justify-content: center; 
+            gap: 30px;
+        }
+                    
+        .projectDetailsContainer {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            align-items: center;
+            justify-content: center;
+            
+        }
+        .projectDetailsContent {
+            background-color: #1f2937;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            max-width: 1400px;
+            width: 90%;
+            min-height: 550px; 
+            max-height: 85vh; 
+            display: flex;
+            flex-direction: column;
+        }
+        .taskListContainer {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        .projectNameInput {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #f9fafb;
+            width: 100%;
+            box-sizing: border-box;
+            background-color: #111827;
+            border: 1px solid #374151; 
+            border-radius: 8px;
+            padding: 12px 10px; 
+            margin-bottom: 15px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .projectNameInput:focus {
+            outline: none;
+            border-color: #214f9a;
+            box-shadow: 0 0 0 3px rgba(33, 79, 154, 0.4); 
+        }
+
+        .projectCard {
+            display: flex;
+            flex-direction: column;
+            width: 450px;
+            height: 200px;
+            background: #374151;
+            color: #d1d5db;   
+            padding: 10px;
+            cursor: pointer;
+        }
+        .projectCard:hover{
+            background-color: #4b5563;
+            color: #ffffff;
+        }
+        .centraliseParagraph{
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .projectCardInput {
+            flex-grow: 1;
+            padding: 8px;
+            border: 1px solid #374151;
+            border-radius: 4px;
+            background-color: #111827;
+            color: #d1d5db;
+        }
+        .saveProjectButton {
+            padding: 15px 25px;
+            font-size: 24px;
+            width: 20%;
+            cursor: pointer;
+            background-color: #10b981;
+            color: #ffffff;
+            border-radius: 25px;
+        }
+        .saveProjectButton:hover{
+            background-color: #34d399;
+            color: #ffffff;
+        }
+        .closeProjectDetailsButton {
+            background-color: #ef4444;
+            color: #ffffff;
+            cursor: pointer;
+        }
+        .closeProjectDetailsButton:hover{
+            background-color: #f87171;
+            color: #ffffff;
+        }
+        .taskCard {
+            background-color: #374151;
+            border-left: 4px solid #3498db;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 4px;
+        }
+
+        .subtaskCard {
+            background-color: #4b5563;
+            padding: 8px 8px 8px 18px;
+            border: none;
+            margin-bottom: 8px;
+        }
+
+        .taskNameInput {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 8px;
+            border: 1px solid #4b5563;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            background-color: #111827;
+            color: #d1d5db;
+        }
+        .saveTaskButton{
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #10b981;
+            color: #ffffff;
+            transition: background-color 0.2s ease;
+            flex-shrink: 0;
+        }
+        .saveTaskButton:hover {
+            background-color: #34d399;
+            color: #ffffff;
+        }
+        .cancelTaskButton{
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #ef4444;
+            color: #ffffff;
+            transition: background-color 0.2s ease;
+            flex-shrink: 0;
+        }
+        .cancelTaskButton:hover {
+            background-color: #f87171;
+            color: #ffffff;
+        }
+        .projectDetailsButtons {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: auto;
+            padding-top: 20px;
+        }
+        
+    </style>
+
+</head>
+<body>
+
+<header class="mainHeader">
+    <h1>Project Dashboard</h1>
+    <button id="addProjectButton" type="button" class="addProjectButton" onclick="addProject()">Add Project</button>
+    <p id="message" class="centraliseParagraph"></p>
+</header>
+
+
+
+<main id="projectContainer" class="projectContainer"> </main>
+<script src="script.js"></script>
+<script src="addProject.js"></script>
+
+<div id="projectDetailsContainer" class="projectDetailsContainer"></div>
+</body>
+</html>

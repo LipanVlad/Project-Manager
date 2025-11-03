@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      background-color: #111827;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #333;
+    }
+
+    .login-container {
+      background: #fff;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+      width: 100%;
+      max-width: 380px;
+      background-color: #1f2937;
+      color: #d1d5db;
+      transform: scale(1.5);  
+      transform-origin: center; 
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 1.8rem;
+      color: white;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 8px;
+      background-color: #111827;
+      color: #d1d5db;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+
+    button {
+      width: 100%;
+      padding: 0.9rem;
+      border-radius: 8px;
+      border: none;
+      background-color: #4b5563;
+      color: #1f2937;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+
+    .register-link {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .register-link a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .register-link a:hover {
+      text-decoration: underline;
+    }
+
+    .message {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Welcome</h2>
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter your username" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password" required>
+      </div>
+      <button type="submit">Login</button>
+    </form>
+    <div class="register-link">
+      Don't have an account?
+      <a href="http://localhost:8080/register">Register</a>
+    </div>
+    <div class="message" id="message"></div>
+  </div>
+</body>
+</html>
+
+
+
+<script>
+  document.getElementById("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    try {
+      const res = await fetch("/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      });
+
+      const msgEl = document.getElementById("message");
+
+      if (res.ok) {
+        const data = await res.json();
+        localStorage.setItem("jwt", data.token);
+        msgEl.style.color = "green";
+        msgEl.textContent = "Login successful! Redirecting...";
+        window.location.href = "/dashboard";
+
+      } else {
+        msgEl.style.color = "red";
+        msgEl.textContent = await res.text();
+      }
+    } catch (err) {
+      document.getElementById("message").textContent = "Error: " + err.message;
+    }
+  });
+</script>
+</body>
+</html>
